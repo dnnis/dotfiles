@@ -1,86 +1,63 @@
 SCRIPT_DIR=/home/dennis/.config/i3blocks/scripts
+separator=false
+separator_block_width=0
 
-# Guess the weather hourly
-[weather]
-command=curl -Ss 'https://wttr.in?0&T&Q' | cut -c 16- | head -2 | xargs echo
-interval=3600
-color=#A4C2F4
-
-[temperature]
-command=$SCRIPT_DIR/temperature
-label=Temp : 
-interval=10
-#T_WARN=70
-#T_CRIT=90
-#SENSOR_CHIP=""
-
-[cpu_usage2]
-command=$SCRIPT_DIR/cpu_usage2/cpu_usage2
-markup=pango
+[window]
+command=xtitle -s -f | cat
 interval=persist
-#min_width=CPU 100.00%
-#REFRESH_TIME=1
-LABEL=CPU ✹:
-#WARN_PERCENT=50
-#CRIT_PERCENT=80
-#DECIMALS=2
+align=left
+
+[separator]
+full_text="    "
+
+[cpu_usage]
+command=echo -e "<span background='#a46600'> Cpu: $(top -n 1 -b | awk '/^%Cpu/{print $2}')% </span>"
+markup=pango
+interval=5
 
 [memory]
-command=$SCRIPT_DIR/memory
-label=MEM ▓: 
-interval=30
-
-#[memory]
-#command=$SCRIPT_DIR/memory
-#label=SWAP
-#instance=swap
-#interval=30
-
-#[bandwidth]
-#command=$SCRIPT_DIR/bandwidth
-#interval=5
-##INTERFACE=eth0
-#INLABEL=Down: 
-#OUTLABEL=/ Up: 
-##TREAT_UNKNOWN_AS_UP=0
-
-[batterybar]
-command=$SCRIPT_DIR/batterybar
-label=Bat 🔋: 
-interval=5
+command=echo -e "<span background='#663333'> Mem: $(top -n 1 -b | awk '/^MiB Mem/{print $8}') MiB </span>"
 markup=pango
-min_width=Bat 🔋: ■■■■■
-# Discharging colors low to high
-#C1=#FF0027
-#C2=#FF3B05
-#C3=#FFB923
-#C4=#FFD000
-#C5=#E4FF00
-#C6=#ADFF00
-#C7=#6DFF00
-#C8=#10BA00
-#CHARGING_COLOR=#00AFE3
-#FULL_COLOR=#FFFFFF
-#AC_COLOR=#535353
+interval=5
+
+# Guess the weather hourly
+#[weather]
+#command=echo -e "<span background='#666666'> $(curl -Ss 'https://wttr.in?0&T&Q' | cut -c 16- | head -2 | xargs echo) </span>"
+#interval=3600
+#markup=pango
+#color=#A4C2F4
 
 [date]
-command=date +'%a %d %b %Y %H:%M:%S'
+command=echo -e "<span background='#135466'> $(date +'%a %d %b %H:%M') </span>"
+markup=pango
 interval=1
 
-[suspend]
-full_text="Sleep "
+[color_picker]
+full_text=<span color='#000000' background="#ffffff">    </span>
+command=i3-msg -q exec gcolor3
+markup=pango
 align=center
+
+[suspend]
+full_text=<span color='#000000' background="#ffffff">   </span>
+align=center
+markup=pango
 command=systemctl suspend
 
 [lock]
-full_text="Lock "
+full_text=<span color='#000000' background="#ffffff">   </span>
+markup=pango
 align=center
-command=i3lock-fancy -f 'scientifica' -t 'DO NOT UNLOCK THIS PLEASE GOD'
+command=i3-msg -q exec "xsecurelock"
 
 [xkb_layout]
-command=$SCRIPT_DIR/xkb_layout
-font=Iosevka
-font_weight=bold
-interval=persist
+command=echo -e "<span color='#000000' background='#ffffff'> $(xkblayout-state print '%s')  </span>"
+interval=once
 markup=pango
+signal=11
 
+[caps-lock]
+command=$SCRIPT_DIR/caps.sh
+interval=once
+color=#ff5555
+signal=10

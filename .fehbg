@@ -1,2 +1,2 @@
 #!/bin/sh
-feh --no-fehbg --bg-fill '/home/dennis/media/pictures/coolImages/mountains.png'
+feh --no-fehbg --bg-fill '/home/dennis/media/images/backgrounds/i3-gruvbox.webp' 
